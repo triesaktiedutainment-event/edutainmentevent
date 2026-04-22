@@ -14,28 +14,24 @@
 
     <nav class="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-50 shadow-sm flex justify-between items-center">
         <img src="logo Edutainment.png" alt="Logo" class="h-8 w-auto">
-        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Executive Portal</span>
+        <span id="labelWilayahTop" class="text-[10px] font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">Memuat Wilayah...</span>
     </nav>
 
-    <div class="max-w-5xl mx-auto p-6 md:p-10">
+    <div id="mainContent" class="max-w-5xl mx-auto p-6 md:p-10 hidden">
         <div class="mb-10">
-            <h1 class="text-3xl font-black text-slate-800 tracking-tight">Progress Laporan VR</h1>
-            <p class="text-sm text-slate-500 mt-1 font-medium">Akumulasi Data Nasional Real-time</p>
+            <h1 class="text-3xl font-black text-slate-800 tracking-tight">Laporan Progress VR</h1>
+            <p id="labelWilayah" class="text-sm text-slate-500 mt-1 font-medium italic"></p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Siswa Terjangkau</p>
                 <h2 id="totalSiswa" class="text-4xl font-black text-blue-600 mt-2">...</h2>
-                <p class="text-xs text-slate-400 mt-4 font-medium italic">Jiwa telah ikut event VR</p>
             </div>
-
             <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jangkauan Sekolah</p>
                 <h2 id="totalEvent" class="text-4xl font-black text-slate-800 mt-2">...</h2>
-                <p class="text-xs text-slate-400 mt-4 font-medium italic">Sekolah telah dikunjungi</p>
             </div>
-
             <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rate Partisipasi</p>
                 <h2 id="avgPartisipasi" class="text-4xl font-black text-indigo-600 mt-2">...</h2>
@@ -46,61 +42,72 @@
         </div>
 
         <div class="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
-            <div class="p-6 px-8 border-b border-slate-50 flex justify-between items-center bg-white">
-                <h3 class="font-bold text-slate-800 tracking-tight">Aktifitas Terakhir</h3>
-                <button onclick="fetchData()" class="text-[10px] font-bold text-blue-600 uppercase tracking-widest hover:underline">Refresh</button>
+            <div class="p-6 px-8 border-b border-slate-50">
+                <h3 class="font-bold text-slate-800 text-sm">Aktifitas Terakhir Wilayah</h3>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full text-left border-collapse text-sm">
                     <thead class="bg-slate-50 text-[10px] uppercase font-bold text-slate-400 tracking-widest">
                         <tr>
-                            <th class="px-8 py-5">Nama Sekolah</th>
-                            <th class="px-8 py-5">Kota</th>
-                            <th class="px-8 py-5 text-center">Partisipan</th>
+                            <th class="px-8 py-5">Sekolah</th>
+                            <th class="px-8 py-5 text-center">Peserta</th>
                             <th class="px-8 py-5 text-center">Status</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody" class="divide-y divide-slate-50 text-sm">
-                        </tbody>
+                    <tbody id="tableBody" class="divide-y divide-slate-50"></tbody>
                 </table>
             </div>
         </div>
-        
-        <footer class="mt-16 text-center pb-12">
-            <p class="text-[10px] text-slate-400 font-bold tracking-[0.2em] uppercase">Copyright 2026, TRIESAKTI EDUTAINMENT</p>
-        </footer>
+    </div>
+
+    <div id="errorScreen" class="hidden flex flex-col items-center justify-center min-h-screen p-6 text-center">
+        <h1 class="text-5xl mb-4">🚫</h1>
+        <h2 class="text-xl font-bold text-slate-800">Akses Ditolak</h2>
+        <p class="text-slate-500 mt-2 text-sm">Anda tidak memiliki izin untuk melihat laporan ini atau kunci akses salah.</p>
     </div>
 
     <script>
-        // MASUKKAN URL WEB APP ANDA DI SINI
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqezHbzExOlS1rTNXPq22cPVqqymBnoaFNuRCggHKC5dKWxRJVVOxhpAgpdpxLWuPj/exec';
 
         async function fetchData() {
+            // Ambil Kunci dari URL (?key=...)
+            const urlParams = new URLSearchParams(window.location.search);
+            const userKey = urlParams.get('key');
+
+            if (!userKey) {
+                document.getElementById('errorScreen').classList.remove('hidden');
+                return;
+            }
+
             try {
-                const response = await fetch(SCRIPT_URL + "?action=read");
+                const response = await fetch(`${SCRIPT_URL}?action=read&key=${userKey}`);
                 const data = await response.json();
                 
-                // Update KPI
+                if (data.status === "unauthorized") {
+                    document.getElementById('errorScreen').classList.remove('hidden');
+                    return;
+                }
+
+                // Tampilkan Konten
+                document.getElementById('mainContent').classList.remove('hidden');
+                document.getElementById('labelWilayahTop').innerText = `WILAYAH: ${data.wilayah}`;
+                document.getElementById('labelWilayah').innerText = `Menampilkan data akumulasi untuk wilayah ${data.wilayah}`;
                 document.getElementById('totalSiswa').innerText = data.totalSiswa.toLocaleString('id-ID');
                 document.getElementById('totalEvent').innerText = data.totalSekolah + " Sekolah";
                 document.getElementById('avgPartisipasi').innerText = data.avgRate + "%";
                 document.getElementById('progressBar').style.width = data.avgRate + "%";
 
-                // Update Tabel
                 const tableBody = document.getElementById('tableBody');
                 tableBody.innerHTML = data.recent.map(item => `
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="px-8 py-5 font-bold text-slate-800">${item.sekolah}</td>
-                        <td class="px-8 py-5 text-slate-500 font-medium">${item.kota}</td>
                         <td class="px-8 py-5 text-center font-black text-blue-600">${item.ikut}</td>
-                        <td class="px-8 py-5 text-center">
-                            <span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter italic">Verified</span>
-                        </td>
+                        <td class="px-8 py-5 text-center"><span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-[9px] font-black uppercase italic tracking-tighter">Verified</span></td>
                     </tr>
                 `).join('');
 
             } catch (error) {
-                console.error("Gagal memuat data:", error);
+                document.getElementById('errorScreen').classList.remove('hidden');
             }
         }
 
