@@ -14,68 +14,80 @@
 </head>
 <body class="bg-slate-100 flex items-center justify-center min-h-screen p-4">
 
-    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden">
-        <div class="h-2 bg-gradient-to-r from-cyan-500 to-blue-600"></div>
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200">
+        <div class="h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
 
         <div class="p-8">
             <div class="text-center mb-8">
                 <img src="logo Edutainment.png" 
                      alt="Logo Tri Sakti Edutainment" 
-                     class="mx-auto mb-4 w-48 h-auto object-contain">
+                     class="mx-auto mb-4 w-44 h-auto object-contain">
                 
                 <h1 class="text-xl font-bold text-slate-800 tracking-tight">Monitoring Event VR</h1>
-                <p class="text-xs text-slate-500 uppercase tracking-widest mt-1 font-semibold">Laporan Pasca Kegiatan</p>
+                <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1 font-bold italic">Smart Digital Reporting System</p>
             </div>
 
-            <form id="eventForm" class="space-y-5">
+            <form id="eventForm" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 ml-1">Nama Sekolah</label>
+                    <label class="block text-xs font-bold text-slate-600 ml-1 uppercase">Nama Sekolah</label>
                     <input type="text" id="namaSekolah" required placeholder="Contoh: SMPN 1 Jakarta"
                         class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 ml-1">Kota</label>
+                    <label class="block text-xs font-bold text-slate-600 ml-1 uppercase">Kota</label>
                     <input type="text" id="kota" required placeholder="Masukkan Nama Kota"
                         class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all">
                 </div>
 
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 ml-1">Tanggal Event</label>
-                    <input type="date" id="tanggal" required
-                        class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all text-slate-600">
-                </div>
-
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-500 uppercase ml-1">Siswa (Dapodik)</label>
-                        <input type="number" id="jmlDapodik" required placeholder="0"
-                            class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all text-center font-bold">
+                        <label class="block text-xs font-bold text-slate-600 ml-1 uppercase">Tanggal</label>
+                        <input type="date" id="tanggal" required
+                            class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-500 uppercase ml-1">Siswa Ikut</label>
+                        <label class="block text-xs font-bold text-slate-600 ml-1 uppercase">Sesi / Hari</label>
+                        <select id="hariKe" required 
+                            class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm font-semibold text-blue-700">
+                            <option value="1">Hari Ke-1</option>
+                            <option value="2">Hari Ke-2</option>
+                            <option value="3">Hari Ke-3</option>
+                            <option value="Full">Full (1 Hari)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 pt-2">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase ml-1">Siswa Dapodik</label>
+                        <input type="number" id="jmlDapodik" required placeholder="0"
+                            class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-center font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase ml-1 text-blue-600">Siswa Ikut VR</label>
                         <input type="number" id="jmlIkut" required placeholder="0"
-                            class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all text-center font-bold text-blue-600">
+                            class="mt-1 block w-full px-4 py-3 bg-blue-50 border border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-center font-bold text-blue-700">
                     </div>
                 </div>
 
                 <button type="submit" id="btnSubmit"
-                    class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform active:scale-[0.98] flex items-center justify-center mt-4">
-                    <span id="btnText">Kirim Laporan Selesai</span>
+                    class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform active:scale-[0.98] flex items-center justify-center mt-6">
+                    <span id="btnText">Simpan Laporan Hari Ini</span>
                     <div id="loader" class="hidden loader ease-linear rounded-full border-2 border-t-2 border-white h-5 w-5 ml-3"></div>
                 </button>
             </form>
 
-            <div id="message" class="hidden mt-6 p-4 rounded-xl text-center text-sm font-semibold animate-pulse"></div>
+            <div id="message" class="hidden mt-6 p-4 rounded-xl text-center text-sm font-semibold"></div>
         </div>
         
         <div class="bg-slate-50 p-4 text-center border-t border-slate-100">
-            <p class="text-[10px] text-slate-400 font-medium">© 2026 Tri Sakti Edutainment - System Monitoring</p>
+            <p class="text-[10px] text-slate-400 font-medium tracking-widest uppercase">© 2026 Tri Sakti Edutainment</p>
         </div>
     </div>
 
     <script>
-        // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
+        // GANTI DENGAN URL WEB APP ANDA
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqezHbzExOlS1rTNXPq22cPVqqymBnoaFNuRCggHKC5dKWxRJVVOxhpAgpdpxLWuPj/exec';
 
         document.getElementById('eventForm').addEventListener('submit', async (e) => {
@@ -89,21 +101,23 @@
             const jmlDapodik = parseInt(document.getElementById('jmlDapodik').value);
             const jmlIkut = parseInt(document.getElementById('jmlIkut').value);
 
+            // Validasi Input
             if (jmlIkut > jmlDapodik) {
-                alert("Perhatian: Jumlah siswa ikut tidak boleh lebih besar dari data Dapodik!");
+                alert("Kesalahan: Jumlah siswa ikut tidak boleh melebihi data Dapodik!");
                 return;
             }
 
-            // UI Loading
+            // Loading State UI
             btn.disabled = true;
-            btn.classList.add('opacity-80');
-            btnText.innerText = "Sedang Mengirim...";
+            btn.classList.add('opacity-70');
+            btnText.innerText = "Mengirim Data...";
             loader.classList.remove('hidden');
 
             const payload = {
                 namaSekolah: document.getElementById('namaSekolah').value,
                 kota: document.getElementById('kota').value,
                 tanggal: document.getElementById('tanggal').value,
+                hariKe: document.getElementById('hariKe').value, // Mengirim data Sesi
                 jmlDapodik: jmlDapodik,
                 jmlIkut: jmlIkut
             };
@@ -119,22 +133,24 @@
                 if (result.status === 'success') {
                     msgBox.classList.remove('hidden', 'bg-red-100', 'text-red-700');
                     msgBox.classList.add('bg-green-100', 'text-green-700');
-                    msgBox.innerText = "✓ Data Berhasil Tersimpan ke Database";
-                    document.getElementById('eventForm').reset();
+                    msgBox.innerText = "✓ Laporan Berhasil Dikirim";
                     
-                    // Reset status setelah 5 detik
-                    setTimeout(() => { msgBox.classList.add('hidden'); }, 5000);
+                    // Reset Form kecuali Nama Sekolah, Kota, dan Dapodik (memudahkan penginputan hari ke-2)
+                    document.getElementById('jmlIkut').value = "";
+                    document.getElementById('hariKe').focus();
+                    
+                    setTimeout(() => { msgBox.classList.add('hidden'); }, 4000);
                 } else {
                     throw new Error(result.message);
                 }
             } catch (error) {
                 msgBox.classList.remove('hidden', 'bg-green-100', 'text-green-700');
                 msgBox.classList.add('bg-red-100', 'text-red-700');
-                msgBox.innerText = "Error: " + error.message;
+                msgBox.innerText = "Gagal: " + error.message;
             } finally {
                 btn.disabled = false;
-                btn.classList.remove('opacity-80');
-                btnText.innerText = "Kirim Laporan Selesai";
+                btn.classList.remove('opacity-70');
+                btnText.innerText = "Simpan Laporan Hari Ini";
                 loader.classList.add('hidden');
             }
         });
