@@ -3,66 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoring Event VR - Triesakti Edutainment</title>
+    <title>Monitoring Event VR - Tri Sakti Edutainment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
         .loader { border-top-color: #3498db; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+<body class="bg-slate-100 flex items-center justify-center min-h-screen p-4">
 
-    <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-        <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold text-gray-800 tracking-tight">Monitoring Event VR</h1>
-            <p class="text-sm text-gray-500">Lembaga Triesakti Edutainment</p>
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-cyan-500 to-blue-600"></div>
+
+        <div class="p-8">
+            <div class="text-center mb-8">
+                <img src="logo Edutainment.png" 
+                     alt="Logo Tri Sakti Edutainment" 
+                     class="mx-auto mb-4 w-48 h-auto object-contain">
+                
+                <h1 class="text-xl font-bold text-slate-800 tracking-tight">Monitoring Event VR</h1>
+                <p class="text-xs text-slate-500 uppercase tracking-widest mt-1 font-semibold">Laporan Pasca Kegiatan</p>
+            </div>
+
+            <form id="eventForm" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 ml-1">Nama Sekolah</label>
+                    <input type="text" id="namaSekolah" required placeholder="Contoh: SMPN 1 Jakarta"
+                        class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 ml-1">Kota</label>
+                    <input type="text" id="kota" required placeholder="Masukkan Nama Kota"
+                        class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 ml-1">Tanggal Event</label>
+                    <input type="date" id="tanggal" required
+                        class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all text-slate-600">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase ml-1">Siswa (Dapodik)</label>
+                        <input type="number" id="jmlDapodik" required placeholder="0"
+                            class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all text-center font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase ml-1">Siswa Ikut</label>
+                        <input type="number" id="jmlIkut" required placeholder="0"
+                            class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all text-center font-bold text-blue-600">
+                    </div>
+                </div>
+
+                <button type="submit" id="btnSubmit"
+                    class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform active:scale-[0.98] flex items-center justify-center mt-4">
+                    <span id="btnText">Kirim Laporan Selesai</span>
+                    <div id="loader" class="hidden loader ease-linear rounded-full border-2 border-t-2 border-white h-5 w-5 ml-3"></div>
+                </button>
+            </form>
+
+            <div id="message" class="hidden mt-6 p-4 rounded-xl text-center text-sm font-semibold animate-pulse"></div>
         </div>
-
-        <form id="eventForm" class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Nama Sekolah</label>
-                <input type="text" id="namaSekolah" required placeholder="Contoh: SMPN 1 Jakarta"
-                    class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Kota</label>
-                <input type="text" id="kota" required placeholder="Nama Kota"
-                    class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Tanggal Event</label>
-                <input type="date" id="tanggal" required
-                    class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-xs font-medium text-gray-700">Jumlah Siswa (Dapodik)</label>
-                    <input type="number" id="jmlDapodik" required placeholder="0"
-                        class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-700">Jumlah Siswa Ikut</label>
-                    <input type="number" id="jmlIkut" required placeholder="0"
-                        class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
-                </div>
-            </div>
-
-            <button type="submit" id="btnSubmit"
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all transform active:scale-95 flex items-center justify-center">
-                <span id="btnText">Kirim Laporan</span>
-                <div id="loader" class="hidden loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-6 w-6 ml-2"></div>
-            </button>
-        </form>
-
-        <div id="message" class="hidden mt-6 p-4 rounded-lg text-center text-sm font-medium"></div>
+        
+        <div class="bg-slate-50 p-4 text-center border-t border-slate-100">
+            <p class="text-[10px] text-slate-400 font-medium">© 2026 Tri Sakti Edutainment - System Monitoring</p>
+        </div>
     </div>
 
     <script>
-        // GANTI URL INI DENGAN URL WEB APP DARI GOOGLE APPS SCRIPT
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqezHbzExOlS1rTNXPq22cPVqqymBnoaFNuRCggHKC5dKWxRJVVOxhpAgpdpxLWuPj/exec';
+        // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
+        const SCRIPT_URL = 'URL_WEB_APP_ANDA';
 
         document.getElementById('eventForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -72,18 +86,18 @@
             const loader = document.getElementById('loader');
             const msgBox = document.getElementById('message');
 
-            // Validasi Sederhana
             const jmlDapodik = parseInt(document.getElementById('jmlDapodik').value);
             const jmlIkut = parseInt(document.getElementById('jmlIkut').value);
 
             if (jmlIkut > jmlDapodik) {
-                alert("Peringatan: Jumlah siswa yang ikut melebihi data Dapodik!");
+                alert("Perhatian: Jumlah siswa ikut tidak boleh lebih besar dari data Dapodik!");
                 return;
             }
 
-            // Loading State
+            // UI Loading
             btn.disabled = true;
-            btnText.innerText = "Mengirim...";
+            btn.classList.add('opacity-80');
+            btnText.innerText = "Sedang Mengirim...";
             loader.classList.remove('hidden');
 
             const payload = {
@@ -105,18 +119,22 @@
                 if (result.status === 'success') {
                     msgBox.classList.remove('hidden', 'bg-red-100', 'text-red-700');
                     msgBox.classList.add('bg-green-100', 'text-green-700');
-                    msgBox.innerText = "Berhasil! Data telah tersimpan di Google Sheets.";
+                    msgBox.innerText = "✓ Data Berhasil Tersimpan ke Database";
                     document.getElementById('eventForm').reset();
+                    
+                    // Reset status setelah 5 detik
+                    setTimeout(() => { msgBox.classList.add('hidden'); }, 5000);
                 } else {
                     throw new Error(result.message);
                 }
             } catch (error) {
                 msgBox.classList.remove('hidden', 'bg-green-100', 'text-green-700');
                 msgBox.classList.add('bg-red-100', 'text-red-700');
-                msgBox.innerText = "Gagal mengirim: " + error.message;
+                msgBox.innerText = "Error: " + error.message;
             } finally {
                 btn.disabled = false;
-                btnText.innerText = "Kirim Laporan";
+                btn.classList.remove('opacity-80');
+                btnText.innerText = "Kirim Laporan Selesai";
                 loader.classList.add('hidden');
             }
         });
