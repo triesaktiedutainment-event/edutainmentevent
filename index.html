@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoring Event VR - Tri Sakti Edutainment</title>
+    <title>Monitoring Event VR - Triesakti Edutainment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
@@ -35,9 +35,22 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 ml-1 uppercase">Kota</label>
-                    <input type="text" id="kota" required placeholder="Masukkan Nama Kota"
-                        class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all">
+                    <label class="block text-xs font-bold text-slate-600 ml-1 uppercase">Wilayah / Kota</label>
+                    <select id="kota" required 
+                        class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm font-semibold">
+                        <option value="" disabled selected>Pilih Kota...</option>
+                        <option value="MAKASSAR">MAKASSAR</option>
+                        <option value="MAROS">MAROS</option>
+                        <option value="PALOPO">PALOPO</option>
+                        <option value="TARAKAN">TARAKAN</option>
+                        <option value="SAMARINDA">SAMARINDA</option>
+                        <option value="BALIKPAPAN">BALIKPAPAN</option>
+                        <option value="TENGGARONG">TENGGARONG</option>
+                        <option value="BERAU">BERAU</option>
+                        <option value="BANJARMASIN">BANJARMASIN</option>
+                        <option value="MATARAM">MATARAM</option>
+                        <option value="BATAM">BATAM</option>
+                    </select>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -82,12 +95,12 @@
         </div>
         
         <div class="bg-slate-50 p-4 text-center border-t border-slate-100">
-            <p class="text-[10px] text-slate-400 font-medium tracking-widest uppercase">© 2026 Tri Sakti Edutainment</p>
+            <p class="text-[10px] text-slate-400 font-medium tracking-widest uppercase">Copyright 2026, TRIESAKTI EDUTAINMENT</p>
         </div>
     </div>
 
     <script>
-        // GANTI DENGAN URL WEB APP ANDA
+        // GANTI DENGAN URL WEB APP ANDA DARI APPS SCRIPT
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqezHbzExOlS1rTNXPq22cPVqqymBnoaFNuRCggHKC5dKWxRJVVOxhpAgpdpxLWuPj/exec';
 
         document.getElementById('eventForm').addEventListener('submit', async (e) => {
@@ -117,7 +130,7 @@
                 namaSekolah: document.getElementById('namaSekolah').value,
                 kota: document.getElementById('kota').value,
                 tanggal: document.getElementById('tanggal').value,
-                hariKe: document.getElementById('hariKe').value, // Mengirim data Sesi
+                hariKe: document.getElementById('hariKe').value,
                 jmlDapodik: jmlDapodik,
                 jmlIkut: jmlIkut
             };
@@ -135,7 +148,7 @@
                     msgBox.classList.add('bg-green-100', 'text-green-700');
                     msgBox.innerText = "✓ Laporan Berhasil Dikirim";
                     
-                    // Reset Form kecuali Nama Sekolah, Kota, dan Dapodik (memudahkan penginputan hari ke-2)
+                    // Reset Form bagian dinamis saja
                     document.getElementById('jmlIkut').value = "";
                     document.getElementById('hariKe').focus();
                     
