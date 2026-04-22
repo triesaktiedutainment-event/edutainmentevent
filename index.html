@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Event VR - Triesakti Edutainment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .loader { border-top-color: #3498db; animation: spinner 1.5s linear infinite; }
+        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-gray-800 tracking-tight">Monitoring Event VR</h1>
+            <p class="text-sm text-gray-500">Lembaga Triesakti Edutainment</p>
+        </div>
+
+        <form id="eventForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Nama Sekolah</label>
+                <input type="text" id="namaSekolah" required placeholder="Contoh: SMPN 1 Jakarta"
+                    class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Kota</label>
+                <input type="text" id="kota" required placeholder="Nama Kota"
+                    class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Tanggal Event</label>
+                <input type="date" id="tanggal" required
+                    class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-medium text-gray-700">Jumlah Siswa (Dapodik)</label>
+                    <input type="number" id="jmlDapodik" required placeholder="0"
+                        class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700">Jumlah Siswa Ikut</label>
+                    <input type="number" id="jmlIkut" required placeholder="0"
+                        class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
+                </div>
+            </div>
+
+            <button type="submit" id="btnSubmit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all transform active:scale-95 flex items-center justify-center">
+                <span id="btnText">Kirim Laporan</span>
+                <div id="loader" class="hidden loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-6 w-6 ml-2"></div>
+            </button>
+        </form>
+
+        <div id="message" class="hidden mt-6 p-4 rounded-lg text-center text-sm font-medium"></div>
+    </div>
+
+    <script>
+        // GANTI URL INI DENGAN URL WEB APP DARI GOOGLE APPS SCRIPT
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqezHbzExOlS1rTNXPq22cPVqqymBnoaFNuRCggHKC5dKWxRJVVOxhpAgpdpxLWuPj/exec';
+
+        document.getElementById('eventForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('btnSubmit');
+            const btnText = document.getElementById('btnText');
+            const loader = document.getElementById('loader');
+            const msgBox = document.getElementById('message');
+
+            // Validasi Sederhana
+            const jmlDapodik = parseInt(document.getElementById('jmlDapodik').value);
+            const jmlIkut = parseInt(document.getElementById('jmlIkut').value);
+
+            if (jmlIkut > jmlDapodik) {
+                alert("Peringatan: Jumlah siswa yang ikut melebihi data Dapodik!");
+                return;
+            }
+
+            // Loading State
+            btn.disabled = true;
+            btnText.innerText = "Mengirim...";
+            loader.classList.remove('hidden');
+
+            const payload = {
+                namaSekolah: document.getElementById('namaSekolah').value,
+                kota: document.getElementById('kota').value,
+                tanggal: document.getElementById('tanggal').value,
+                jmlDapodik: jmlDapodik,
+                jmlIkut: jmlIkut
+            };
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    msgBox.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+                    msgBox.classList.add('bg-green-100', 'text-green-700');
+                    msgBox.innerText = "Berhasil! Data telah tersimpan di Google Sheets.";
+                    document.getElementById('eventForm').reset();
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                msgBox.classList.remove('hidden', 'bg-green-100', 'text-green-700');
+                msgBox.classList.add('bg-red-100', 'text-red-700');
+                msgBox.innerText = "Gagal mengirim: " + error.message;
+            } finally {
+                btn.disabled = false;
+                btnText.innerText = "Kirim Laporan";
+                loader.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
