@@ -73,7 +73,7 @@
             // Ambil Kunci dari URL (?key=...)
             const urlParams = new URLSearchParams(window.location.search);
             const userKey = urlParams.get('key');
-
+        
             if (!userKey) {
                 document.getElementById('errorScreen').classList.remove('hidden');
                 return;
