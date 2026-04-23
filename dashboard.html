@@ -1,117 +1,59 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Executive Dashboard - Triesakti Edutainment</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-    </style>
-</head>
-<body class="bg-slate-50 min-h-screen">
+<script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqezHbzExOlS1rTNXPq22cPVqqymBnoaFNuRCggHKC5dKWxRJVVOxhpAgpdpxLWuPj/exec'; // PASTIKAN SUDAH DIGANTI!
 
-    <nav class="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-50 shadow-sm flex justify-between items-center">
-        <img src="logo Edutainment.png" alt="Logo" class="h-8 w-auto">
-        <span id="labelWilayahTop" class="text-[10px] font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">Memuat Wilayah...</span>
-    </nav>
+    async function fetchData() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const userKey = urlParams.get('key');
+        const labelTop = document.getElementById('labelWilayahTop');
 
-    <div id="mainContent" class="max-w-5xl mx-auto p-6 md:p-10 hidden">
-        <div class="mb-10">
-            <h1 class="text-3xl font-black text-slate-800 tracking-tight">Laporan Progress VR</h1>
-            <p id="labelWilayah" class="text-sm text-slate-500 mt-1 font-medium italic"></p>
-        </div>
+        if (!userKey) {
+            labelTop.innerText = "KUNCI TIDAK ADA";
+            document.getElementById('errorScreen').classList.remove('hidden');
+            return;
+        }
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Siswa Terjangkau</p>
-                <h2 id="totalSiswa" class="text-4xl font-black text-blue-600 mt-2">...</h2>
-            </div>
-            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jangkauan Sekolah</p>
-                <h2 id="totalEvent" class="text-4xl font-black text-slate-800 mt-2">...</h2>
-            </div>
-            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rate Partisipasi</p>
-                <h2 id="avgPartisipasi" class="text-4xl font-black text-indigo-600 mt-2">...</h2>
-                <div class="w-full bg-slate-100 h-2 rounded-full mt-5 overflow-hidden">
-                    <div id="progressBar" class="bg-indigo-500 h-full w-0 transition-all duration-1000"></div>
-                </div>
-            </div>
-        </div>
+        try {
+            console.log("Menghubungi Server...");
+            const response = await fetch(`${SCRIPT_URL}?action=read&key=${userKey}`);
+            
+            if (!response.ok) throw new Error("Server Google Tidak Merespon");
 
-        <div class="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
-            <div class="p-6 px-8 border-b border-slate-50">
-                <h3 class="font-bold text-slate-800 text-sm">Aktifitas Terakhir Wilayah</h3>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-sm">
-                    <thead class="bg-slate-50 text-[10px] uppercase font-bold text-slate-400 tracking-widest">
-                        <tr>
-                            <th class="px-8 py-5">Sekolah</th>
-                            <th class="px-8 py-5 text-center">Peserta</th>
-                            <th class="px-8 py-5 text-center">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody" class="divide-y divide-slate-50"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div id="errorScreen" class="hidden flex flex-col items-center justify-center min-h-screen p-6 text-center">
-        <h1 class="text-5xl mb-4">🚫</h1>
-        <h2 class="text-xl font-bold text-slate-800">Akses Ditolak</h2>
-        <p class="text-slate-500 mt-2 text-sm">Anda tidak memiliki izin untuk melihat laporan ini atau kunci akses salah.</p>
-    </div>
-
-    <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqezHbzExOlS1rTNXPq22cPVqqymBnoaFNuRCggHKC5dKWxRJVVOxhpAgpdpxLWuPj/exec';
-
-        async function fetchData() {
-            // Ambil Kunci dari URL (?key=...)
-            const urlParams = new URLSearchParams(window.location.search);
-            const userKey = urlParams.get('key');
-        
-            if (!userKey) {
+            const data = await response.json();
+            
+            if (data.status === "unauthorized") {
+                labelTop.innerText = "AKSES DITOLAK";
                 document.getElementById('errorScreen').classList.remove('hidden');
                 return;
             }
 
-            try {
-                const response = await fetch(`${SCRIPT_URL}?action=read&key=${userKey}`);
-                const data = await response.json();
-                
-                if (data.status === "unauthorized") {
-                    document.getElementById('errorScreen').classList.remove('hidden');
-                    return;
-                }
+            // Tampilkan konten jika sukses
+            document.getElementById('mainContent').classList.remove('hidden');
+            labelTop.innerText = `WILAYAH: ${data.wilayah}`;
+            document.getElementById('labelWilayah').innerText = `Laporan untuk wilayah ${data.wilayah}`;
+            document.getElementById('totalSiswa').innerText = data.totalSiswa.toLocaleString('id-ID');
+            document.getElementById('avgPartisipasi').innerText = data.avgRate + "%";
+            document.getElementById('totalEvent').innerText = data.totalSekolah + " Sekolah";
+            document.getElementById('progressBar').style.width = data.avgRate + "%";
 
-                // Tampilkan Konten
-                document.getElementById('mainContent').classList.remove('hidden');
-                document.getElementById('labelWilayahTop').innerText = `WILAYAH: ${data.wilayah}`;
-                document.getElementById('labelWilayah').innerText = `Menampilkan data akumulasi untuk wilayah ${data.wilayah}`;
-                document.getElementById('totalSiswa').innerText = data.totalSiswa.toLocaleString('id-ID');
-                document.getElementById('totalEvent').innerText = data.totalSekolah + " Sekolah";
-                document.getElementById('avgPartisipasi').innerText = data.avgRate + "%";
-                document.getElementById('progressBar').style.width = data.avgRate + "%";
+            // Render Tabel
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = data.recent.map(item => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-8 py-5 font-bold text-slate-800 uppercase tracking-tight">${item.sekolah}</td>
+                    <td class="px-8 py-5 text-center font-extrabold text-blue-600">${item.ikut}</td>
+                    <td class="px-8 py-5 text-center">
+                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[9px] font-black uppercase italic tracking-tighter italic border border-green-200">Terverifikasi</span>
+                    </td>
+                </tr>
+            `).join('');
 
-                const tableBody = document.getElementById('tableBody');
-                tableBody.innerHTML = data.recent.map(item => `
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-8 py-5 font-bold text-slate-800">${item.sekolah}</td>
-                        <td class="px-8 py-5 text-center font-black text-blue-600">${item.ikut}</td>
-                        <td class="px-8 py-5 text-center"><span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-[9px] font-black uppercase italic tracking-tighter">Verified</span></td>
-                    </tr>
-                `).join('');
+            renderChart(data.recent);
 
-            } catch (error) {
-                document.getElementById('errorScreen').classList.remove('hidden');
-            }
+        } catch (error) {
+            labelTop.innerText = "ERROR KONEKSI";
+            console.error("Detail Error:", error);
+            alert("Terjadi masalah saat memuat data. Pastikan URL Script benar dan izin sudah Anyone.");
         }
-
-        window.onload = fetchData;
-    </script>
-</body>
-</html>
+    }
+    // ... sisa fungsi renderChart tetap sama
+</script>
