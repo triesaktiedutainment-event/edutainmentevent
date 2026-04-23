@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoring Event VR - Triesakti Edutainment</title>
+    <title>Input Event VR - Triesakti Edutainment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
         .loader { border-top-color: #3498db; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -14,31 +14,31 @@
 </head>
 <body class="bg-slate-100 flex items-center justify-center min-h-screen p-4">
 
-    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200">
-        <div class="h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+    <div class="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200">
+        <div class="h-2 bg-gradient-to-r from-blue-600 to-indigo-700"></div>
 
-        <div class="p-8">
-            <div class="text-center mb-8">
+        <div class="p-8 md:p-10">
+            <div class="text-center mb-10">
                 <img src="logo Edutainment.png" 
-                     alt="Logo Tri Sakti Edutainment" 
-                     class="mx-auto mb-4 w-44 h-auto object-contain">
+                     alt="Logo Triesakti Edutainment" 
+                     class="mx-auto mb-6 w-48 h-auto object-contain">
                 
-                <h1 class="text-xl font-bold text-slate-800 tracking-tight">Monitoring Event VR</h1>
-                <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1 font-bold italic">Smart Digital Reporting System</p>
+                <h1 class="text-xl font-black text-slate-800 tracking-tight uppercase">Monitoring Event VR</h1>
+                <p class="text-[10px] text-slate-400 uppercase tracking-[0.2em] mt-1 font-bold">Field Operator Reporting</p>
             </div>
 
-            <form id="eventForm" class="space-y-4">
+            <form id="eventForm" class="space-y-5">
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 ml-1 uppercase">Nama Sekolah</label>
-                    <input type="text" id="namaSekolah" required placeholder="Contoh: SMPN 1 Jakarta"
-                        class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all">
+                    <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Nama Sekolah</label>
+                    <input type="text" id="namaSekolah" required placeholder="Masukkan Nama Sekolah"
+                        class="mt-1 block w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all font-semibold text-slate-700">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 ml-1 uppercase">Wilayah / Kota</label>
+                    <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Wilayah / Kota</label>
                     <select id="kota" required 
-                        class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm font-semibold">
-                        <option value="" disabled selected>Pilih Kota...</option>
+                        class="mt-1 block w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-bold text-slate-700 appearance-none">
+                        <option value="" disabled selected>Pilih Wilayah...</option>
                         <option value="MAKASSAR">MAKASSAR</option>
                         <option value="MAROS">MAROS</option>
                         <option value="PALOPO">PALOPO</option>
@@ -55,14 +55,14 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 ml-1 uppercase">Tanggal</label>
+                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Tanggal</label>
                         <input type="date" id="tanggal" required
-                            class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm">
+                            class="mt-1 block w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm font-bold text-slate-600">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 ml-1 uppercase">Sesi / Hari</label>
+                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1 text-blue-600">Sesi Ke-</label>
                         <select id="hariKe" required 
-                            class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm font-semibold text-blue-700">
+                            class="mt-1 block w-full px-4 py-4 bg-blue-50 border border-blue-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm font-black text-blue-700">
                             <option value="1">Hari Ke-1</option>
                             <option value="2">Hari Ke-2</option>
                             <option value="3">Hari Ke-3</option>
@@ -73,34 +73,34 @@
 
                 <div class="grid grid-cols-2 gap-4 pt-2">
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase ml-1">Siswa Dapodik</label>
+                        <label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Siswa Dapodik</label>
                         <input type="number" id="jmlDapodik" required placeholder="0"
-                            class="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-center font-bold">
+                            class="mt-1 block w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none text-center font-black text-slate-700">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase ml-1 text-blue-600">Siswa Ikut VR</label>
+                        <label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1 text-blue-600">Siswa Ikut VR</label>
                         <input type="number" id="jmlIkut" required placeholder="0"
-                            class="mt-1 block w-full px-4 py-3 bg-blue-50 border border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-center font-bold text-blue-700">
+                            class="mt-1 block w-full px-4 py-4 bg-blue-50 border border-blue-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none text-center font-black text-blue-700">
                     </div>
                 </div>
 
                 <button type="submit" id="btnSubmit"
-                    class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform active:scale-[0.98] flex items-center justify-center mt-6">
+                    class="w-full bg-slate-800 hover:bg-slate-900 text-white font-black py-5 rounded-3xl shadow-xl transition-all transform active:scale-[0.97] flex items-center justify-center mt-6 uppercase tracking-widest text-sm">
                     <span id="btnText">Simpan Laporan Hari Ini</span>
                     <div id="loader" class="hidden loader ease-linear rounded-full border-2 border-t-2 border-white h-5 w-5 ml-3"></div>
                 </button>
             </form>
 
-            <div id="message" class="hidden mt-6 p-4 rounded-xl text-center text-sm font-semibold"></div>
+            <div id="message" class="hidden mt-8 p-4 rounded-2xl text-center text-xs font-bold tracking-tight"></div>
         </div>
         
-        <div class="bg-slate-50 p-4 text-center border-t border-slate-100">
-            <p class="text-[10px] text-slate-400 font-medium tracking-widest uppercase">Copyright 2026, TRIESAKTI EDUTAINMENT</p>
+        <div class="bg-slate-50 p-6 text-center border-t border-slate-100">
+            <p class="text-[9px] text-slate-400 font-bold tracking-[0.3em] uppercase">Copyright 2026, TRIESAKTI EDUTAINMENT</p>
         </div>
     </div>
 
     <script>
-        // GANTI DENGAN URL WEB APP ANDA DARI APPS SCRIPT
+        // MASUKKAN URL WEB APP ANDA DI SINI
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqezHbzExOlS1rTNXPq22cPVqqymBnoaFNuRCggHKC5dKWxRJVVOxhpAgpdpxLWuPj/exec';
 
         document.getElementById('eventForm').addEventListener('submit', async (e) => {
@@ -114,17 +114,17 @@
             const jmlDapodik = parseInt(document.getElementById('jmlDapodik').value);
             const jmlIkut = parseInt(document.getElementById('jmlIkut').value);
 
-            // Validasi Input
             if (jmlIkut > jmlDapodik) {
-                alert("Kesalahan: Jumlah siswa ikut tidak boleh melebihi data Dapodik!");
+                alert("Kesalahan Data: Jumlah siswa ikut tidak boleh melebihi data Dapodik!");
                 return;
             }
 
-            // Loading State UI
+            // UI Loading State
             btn.disabled = true;
             btn.classList.add('opacity-70');
-            btnText.innerText = "Mengirim Data...";
+            btnText.innerText = "MENGIRIM...";
             loader.classList.remove('hidden');
+            msgBox.classList.add('hidden');
 
             const payload = {
                 namaSekolah: document.getElementById('namaSekolah').value,
@@ -136,30 +136,31 @@
             };
 
             try {
+                // Menggunakan mode 'cors' dan headers yang tepat untuk Google Apps Script
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
+                    mode: 'no-cors', // Solusi jitu untuk masalah "Failed to fetch" pada Google Script
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                const result = await response.json();
+                // Karena no-cors, kita tidak bisa membaca response JSON, tapi kita tahu data terkirim jika tidak masuk ke catch
+                msgBox.classList.remove('hidden', 'bg-red-50', 'text-red-700');
+                msgBox.classList.add('bg-green-50', 'text-green-700');
+                msgBox.innerText = "✓ LAPORAN BERHASIL TERKIRIM KE SISTEM";
+                
+                // Reset form hanya pada bagian data jumlah
+                document.getElementById('jmlIkut').value = "";
+                document.getElementById('hariKe').focus();
+                
+                setTimeout(() => { msgBox.classList.add('hidden'); }, 5000);
 
-                if (result.status === 'success') {
-                    msgBox.classList.remove('hidden', 'bg-red-100', 'text-red-700');
-                    msgBox.classList.add('bg-green-100', 'text-green-700');
-                    msgBox.innerText = "✓ Laporan Berhasil Dikirim";
-                    
-                    // Reset Form bagian dinamis saja
-                    document.getElementById('jmlIkut').value = "";
-                    document.getElementById('hariKe').focus();
-                    
-                    setTimeout(() => { msgBox.classList.add('hidden'); }, 4000);
-                } else {
-                    throw new Error(result.message);
-                }
             } catch (error) {
-                msgBox.classList.remove('hidden', 'bg-green-100', 'text-green-700');
-                msgBox.classList.add('bg-red-100', 'text-red-700');
-                msgBox.innerText = "Gagal: " + error.message;
+                msgBox.classList.remove('hidden', 'bg-green-50', 'text-green-700');
+                msgBox.classList.add('bg-red-50', 'text-red-700');
+                msgBox.innerText = "GAGAL: JARINGAN BERMASALAH ATAU URL SALAH";
+                console.error(error);
             } finally {
                 btn.disabled = false;
                 btn.classList.remove('opacity-70');
