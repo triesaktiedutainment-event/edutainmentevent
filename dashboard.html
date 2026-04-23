@@ -1,59 +1,113 @@
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqezHbzExOlS1rTNXPq22cPVqqymBnoaFNuRCggHKC5dKWxRJVVOxhpAgpdpxLWuPj/exec'; // PASTIKAN SUDAH DIGANTI!
+    // URL Web App Anda sudah benar
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqezHbzExOlS1rTNXPq22cPVqqymBnoaFNuRCggHKC5dKWxRJVVOxhpAgpdpxLWuPj/exec'; 
+
+    let myChart = null;
 
     async function fetchData() {
         const urlParams = new URLSearchParams(window.location.search);
         const userKey = urlParams.get('key');
         const labelTop = document.getElementById('labelWilayahTop');
+        const mainContent = document.getElementById('mainContent');
+        const errorScreen = document.getElementById('errorScreen');
 
         if (!userKey) {
             labelTop.innerText = "KUNCI TIDAK ADA";
-            document.getElementById('errorScreen').classList.remove('hidden');
+            errorScreen.classList.remove('hidden');
+            errorScreen.innerHTML = "<h1 class='text-4xl'>🔑</h1><p class='mt-4 font-bold'>Gunakan parameter ?key=... di ujung link</p>";
             return;
         }
 
         try {
-            console.log("Menghubungi Server...");
+            labelTop.innerText = "MENGHUBUNGI SERVER...";
             const response = await fetch(`${SCRIPT_URL}?action=read&key=${userKey}`);
             
-            if (!response.ok) throw new Error("Server Google Tidak Merespon");
+            // Jika yang dikembalikan bukan JSON (tapi halaman error Google)
+            const contentType = response.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                const textError = await response.text();
+                console.error("Server mengembalikan teks, bukan data:", textError);
+                throw new Error("Google Script Error: Pastikan Deployment sudah 'Anyone'");
+            }
 
             const data = await response.json();
             
             if (data.status === "unauthorized") {
                 labelTop.innerText = "AKSES DITOLAK";
-                document.getElementById('errorScreen').classList.remove('hidden');
+                errorScreen.classList.remove('hidden');
                 return;
             }
 
-            // Tampilkan konten jika sukses
-            document.getElementById('mainContent').classList.remove('hidden');
+            // TAMPILKAN KONTEN
+            mainContent.classList.remove('hidden');
             labelTop.innerText = `WILAYAH: ${data.wilayah}`;
             document.getElementById('labelWilayah').innerText = `Laporan untuk wilayah ${data.wilayah}`;
-            document.getElementById('totalSiswa').innerText = data.totalSiswa.toLocaleString('id-ID');
-            document.getElementById('avgPartisipasi').innerText = data.avgRate + "%";
-            document.getElementById('totalEvent').innerText = data.totalSekolah + " Sekolah";
-            document.getElementById('progressBar').style.width = data.avgRate + "%";
+            document.getElementById('totalSiswa').innerText = (data.totalSiswa || 0).toLocaleString('id-ID');
+            document.getElementById('avgPartisipasi').innerText = (data.avgRate || 0) + "%";
+            document.getElementById('totalEvent').innerText = (data.totalSekolah || 0) + " Sekolah";
+            document.getElementById('progressBar').style.width = (data.avgRate || 0) + "%";
 
             // Render Tabel
             const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = data.recent.map(item => `
-                <tr class="hover:bg-slate-50 transition-colors">
-                    <td class="px-8 py-5 font-bold text-slate-800 uppercase tracking-tight">${item.sekolah}</td>
-                    <td class="px-8 py-5 text-center font-extrabold text-blue-600">${item.ikut}</td>
-                    <td class="px-8 py-5 text-center">
-                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[9px] font-black uppercase italic tracking-tighter italic border border-green-200">Terverifikasi</span>
-                    </td>
-                </tr>
-            `).join('');
-
-            renderChart(data.recent);
+            if (data.recent && data.recent.length > 0) {
+                tableBody.innerHTML = data.recent.map(item => `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-8 py-5 font-bold text-slate-800 uppercase tracking-tight">${item.sekolah}</td>
+                        <td class="px-8 py-5 text-center font-extrabold text-blue-600">${item.ikut}</td>
+                        <td class="px-8 py-5 text-center">
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[9px] font-black uppercase italic tracking-tighter border border-green-200">Terverifikasi</span>
+                        </td>
+                    </tr>
+                `).join('');
+                renderChart(data.recent);
+            } else {
+                tableBody.innerHTML = "<tr><td colspan='3' class='p-10 text-center text-slate-400'>Belum ada data masuk</td></tr>";
+            }
 
         } catch (error) {
-            labelTop.innerText = "ERROR KONEKSI";
-            console.error("Detail Error:", error);
-            alert("Terjadi masalah saat memuat data. Pastikan URL Script benar dan izin sudah Anyone.");
+            labelTop.innerText = "ERROR SISTEM";
+            errorScreen.classList.remove('hidden');
+            errorScreen.innerHTML = `
+                <div class="bg-red-50 p-6 rounded-3xl border border-red-100 max-w-sm mx-auto">
+                    <h2 class="text-red-600 font-black text-lg">⚠️ TERJADI KESALAHAN</h2>
+                    <p class="text-red-500 text-xs mt-2 font-mono">${error.message}</p>
+                    <button onclick="location.reload()" class="mt-4 bg-red-600 text-white px-4 py-2 rounded-xl text-xs font-bold">Coba Lagi</button>
+                </div>
+            `;
         }
     }
-    // ... sisa fungsi renderChart tetap sama
+
+    function renderChart(dataRecent) {
+        const canvas = document.getElementById('chartProgress');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const labels = dataRecent.map(item => item.sekolah).reverse();
+        const values = dataRecent.map(item => item.ikut).reverse();
+
+        if (myChart) myChart.destroy();
+        myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Siswa Ikut',
+                    data: values,
+                    backgroundColor: 'rgba(37, 99, 235, 0.8)',
+                    borderRadius: 10,
+                    barThickness: 20
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { display: false } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    }
+
+    window.onload = fetchData;
 </script>
